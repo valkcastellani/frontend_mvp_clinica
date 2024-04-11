@@ -23,36 +23,154 @@
       <div class="title">
         <h1>Fichas dos Pacientes</h1>
       </div>
-      <button class="button-float-right">
+      <button class="button button-float-right">
         <i class="fa-solid fa-hospital-user"></i>
         <span class="button-text">Novo Paciente</span>
       </button>
     </header>
 
-    <!-- Opções para adicionar um novo item -->
-    <section class="newItem">
-      <input type="text" id="newInput" placeholder="Adicionar novo item:" />
-      <input type="text" id="newQuantity" placeholder="Quantidade:" />
-      <input type="text" id="newPrice" placeholder="Valor:" />
-      <button onclick="newItem()" class="addBtn"></button>
+    <!-- Tabela com items existentes -->
+    <section class="pacientes">
+      <table id="myTable">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Data de Nascimento</th>
+            <th>Endereço</th>
+            <th>Valor</th>
+            <th>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nome</td>
+            <td>Data de Nascimento</td>
+            <td>Endereço</td>
+            <td>Valor</td>
+            <td>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Nome</td>
+            <td>Data de Nascimento</td>
+            <td>Endereço</td>
+            <td>Valor</td>
+            <td>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Nome</td>
+            <td>Data de Nascimento</td>
+            <td>Endereço</td>
+            <td>Valor</td>
+            <td>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Nome</td>
+            <td>Data de Nascimento</td>
+            <td>Endereço</td>
+            <td>Valor</td>
+            <td>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Nome</td>
+            <td>Data de Nascimento</td>
+            <td>Endereço</td>
+            <td>Valor</td>
+            <td>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
+                width="15px"
+                height="15px"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
-    <!-- Tabela com items existentes -->
-    <section class="items">
-      <table id="myTable">
-        <tr>
-          <th>Nome</th>
-          <th>Quantidade</th>
-          <th>Valor</th>
-          <th>
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/126/126468.png"
-              width="15px"
-              height="15px"
+    <!-- Opções para adicionar um novo item -->
+    <section class="novoPaciente modal">
+      <div class="modal-content">
+        <form action="#" method="post">
+          <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required />
+          </div>
+          <div class="form-group">
+            <label for="data_nascimento">Data de Nascimento:</label>
+            <input
+              type="date"
+              id="data_nascimento"
+              name="data_nascimento"
+              required
             />
-          </th>
-        </tr>
-      </table>
+          </div>
+          <div class="form-group">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" name="sexo" required>
+              <option value="">Selecione</option>
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" />
+          </div>
+          <div class="form-group">
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" name="endereco" />
+          </div>
+          <div class="form-group">
+            <label for="telefone">Telefone:</label>
+            <input type="tel" id="telefone" name="telefone" />
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" />
+          </div>
+        </form>
+        <div class="button-bar">
+          <button class="button button-confirm">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span class="button-text">Salvar</span>
+          </button>
+          <button class="button button-cancel">
+            <i class="fa-solid fa-rectangle-xmark"></i>
+            <span class="button-text">Fechar</span>
+          </button>
+        </div>
+      </div>
     </section>
 
     <script src="scripts.js"></script>
