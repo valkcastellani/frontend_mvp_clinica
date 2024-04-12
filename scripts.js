@@ -4,13 +4,13 @@
   --------------------------------------------------------------------------------------
 */
 const getList = async () => {
-  let url = 'http://127.0.0.1:5000/produtos';
+  let url = 'http://127.0.0.1:5000/pacientes';
   fetch(url, {
     method: 'get',
   })
     .then((response) => response.json())
     .then((data) => {
-      data.produtos.forEach(item => insertList(item.nome, item.quantidade, item.valor))
+      data.produtos.forEach(item => insertList(item.cpf, item.nome, item.data_nascimento, item.telefone, item.email, item.data_insercao))
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -69,7 +69,7 @@ const insertButton = (parent) => {
 */
 const removeElement = () => {
   let close = document.getElementsByClassName("close");
-  // var table = document.getElementById('myTable');
+  // var table = document.getElementById('tablePacientes');
   let i;
   for (i = 0; i < close.length; i++) {
     close[i].onclick = function () {
@@ -127,9 +127,9 @@ const newItem = () => {
   Função para inserir items na lista apresentada
   --------------------------------------------------------------------------------------
 */
-const insertList = (nameProduct, quantity, price) => {
-  var item = [nameProduct, quantity, price]
-  var table = document.getElementById('myTable');
+const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) => {
+  var item = [cpf, nome, data_nascimento, telefone, email, data_insercao]
+  var table = document.getElementById('tablePacientes').getElementsByTagName('tbody');
   var row = table.insertRow();
 
   for (var i = 0; i < item.length; i++) {
@@ -137,9 +137,9 @@ const insertList = (nameProduct, quantity, price) => {
     cel.textContent = item[i];
   }
   insertButton(row.insertCell(-1))
-  document.getElementById("newInput").value = "";
-  document.getElementById("newQuantity").value = "";
-  document.getElementById("newPrice").value = "";
+  // document.getElementById("newInput").value = "";
+  // document.getElementById("newQuantity").value = "";
+  // document.getElementById("newPrice").value = "";
 
   removeElement()
 }
