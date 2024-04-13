@@ -23,7 +23,7 @@
       <div class="title">
         <h1>Fichas dos Pacientes</h1>
       </div>
-      <button class="button button-float-right">
+      <button class="button button-float-right" onclick="abreFechaModal()">
         <i class="fa-solid fa-hospital-user"></i>
         <span class="button-text">Novo Paciente</span>
       </button>
@@ -31,7 +31,7 @@
 
     <!-- Tabela com items existentes -->
     <section class="pacientes">
-      <table id="tablePacientes">
+      <table id="tabelaPacientes">
         <thead>
           <tr>
             <th>CPF</th>
@@ -43,13 +43,12 @@
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
       </table>
     </section>
 
     <!-- Opções para adicionar um novo item -->
-    <section class="novoPaciente modal">
+    <section id="novoPaciente" class="modal">
       <div class="modal-content">
         <form action="#" method="post">
           <div class="form-group">
@@ -96,7 +95,7 @@
             <i class="fa-solid fa-floppy-disk"></i>
             <span class="button-text">Salvar</span>
           </button>
-          <button class="button button-cancel">
+          <button class="button button-cancel" onclick="abreFechaModal()">
             <i class="fa-solid fa-rectangle-xmark"></i>
             <span class="button-text">Fechar</span>
           </button>
@@ -104,6 +103,9 @@
       </div>
     </section>
 
+    <!-- Bibliotecas Externas utilizadas na aplicação -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bibliotecas da aplicação -->
     <script src="scripts.js"></script>
   </body>
 </html>

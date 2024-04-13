@@ -60,16 +60,19 @@ header {
     font-size: 20px;
 }
 
+.button-table,
 .button-float-right {
     color: var(--cor-button);
     background-color: var(--branco);
 }
 
+.button-table:hover,
 .button-float-right:hover {
     background-color: var(--cor-button-hover);
     color: var(--branco);
 }
 
+.button-table:active,
 .button-float-right:active {
     background-color: var(--cor-fundo);
     color: var(--branco);
@@ -100,6 +103,11 @@ header {
 .button-bar {
     display: flex;
     justify-content: end;
+}
+
+.button-table {
+    display: inline;
+    justify-content: center;
 }
 
 /* Estilizando a tabela */
@@ -169,11 +177,10 @@ select {
 }
 
 
-/* Estilo para o Modal */
+/* Estilos para o FORM Modal */
 .modal {
     position: fixed;
-    top: 0;
-    /*-100vh;*/
+    top: -100vh;
     left: 0;
     width: 100%;
     height: 100vh;
@@ -182,7 +189,7 @@ select {
 }
 
 .modal-visible {
-    top: 0;
+    top: 0 !important;
 }
 
 .modal-content {
@@ -193,12 +200,6 @@ select {
     background-color: var(--branco);
     padding: 20px;
     border-radius: 10px;
-}
-
-.modal-button {
-    padding: 10px;
-    border: 1px solid #ddd;
-    cursor: pointer;
 }
 
 /* 
