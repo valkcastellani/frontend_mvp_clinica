@@ -15,5 +15,7 @@ Basta fazer o download do projeto e abrir o arquivo index.html no seu browser.
 ## Bibliotecas Externas Utilizadas
 
 > [SweetAlert2](https://sweetalert2.github.io/) é uma biblioteca para substituir o alert padrão do JavaScript.
+
 > [jQuery](https://jquery.com/) é uma biblioteca para manipulação do DOM.
+
 > [jQuery-Mask](https://igorescobar.github.io/jQuery-Mask-Plugin/) é um plugin para trabalhar com máscaras via jQuery.
