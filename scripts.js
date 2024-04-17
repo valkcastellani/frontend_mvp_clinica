@@ -1,3 +1,9 @@
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para apresentar/esconder o modal de Paciente
+  --------------------------------------------------------------------------------------
+*/
 const abreFechaModal = () => {
   let sessionPaciente = document.getElementById("novoPaciente");
   let cpf = document.getElementById("cpf");
@@ -157,68 +163,17 @@ getList()
 
 /*
   --------------------------------------------------------------------------------------
-  Inclusão das mascaras dos dados
-  --------------------------------------------------------------------------------------
-*/
-$(document).ready(function () {
-  $('#cpf').mask('000.000.000-00', { reverse: true });
-  $('#cep').mask('00000-000');
-  $("#telefone").mask("(99) 9999-9999?9");
-});
-
-/*
-  --------------------------------------------------------------------------------------
-  Função para formatar o CPF
-  --------------------------------------------------------------------------------------
-*/
-const formatarCPF = (cpf) => {
-  // Remove tudo que não seja número
-  let cpf_numerico = cpf.toString().replace(/\D/g, "");
-  // Adiciona pontos e hífen
-  return cpf_numerico.substr(0, 3) + "." + cpf_numerico.substr(3, 3) + "." + cpf_numerico.substr(6, 3) + "-" + cpf_numerico.substr(9, 2);
-}
-
-
-/*
-  --------------------------------------------------------------------------------------
-  Função para validar o CPF
-  --------------------------------------------------------------------------------------
-*/
-function validarCPF(inputCPF) {
-  let soma = 0;
-  let resto;
-  let cpf = inputCPF.value.toString().replace(/\D/g, "");
-
-  if (cpf == '00000000000') return false;
-  for (i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-  resto = (soma * 10) % 11;
-
-  if ((resto == 10) || (resto == 11)) resto = 0;
-  if (resto != parseInt(cpf.substring(9, 10))) return false;
-
-  soma = 0;
-  for (i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-  resto = (soma * 10) % 11;
-
-  if ((resto == 10) || (resto == 11)) resto = 0;
-  if (resto != parseInt(cpf.substring(10, 11))) return false;
-  return true;
-}
-
-
-/*
-  --------------------------------------------------------------------------------------
   Função para colocar um item na lista do servidor via requisição POST
   --------------------------------------------------------------------------------------
 */
 const gravarPaciente = async () => {
-  let cpf = document.getElementById("cpf");
+  let cpf = document.getElementById("cpf").value.toString().replace(/\D/g, "");
   let nome = document.getElementById("nome");
   let data_nascimento = document.getElementById("data_nascimento");
   let sexo = document.getElementById("sexo");
-  let cep = document.getElementById("cep");
+  let cep = document.getElementById("cep").value.toString().replace(/\D/g, "");
   let endereco = document.getElementById("endereco");
-  let telefone = document.getElementById("telefone");
+  let telefone = document.getElementById("telefone").value.toString().replace(/\D/g, "");
   let email = document.getElementById("email");
   let mensagem = "";
 
@@ -240,14 +195,15 @@ const gravarPaciente = async () => {
   } else {
     const formData = new FormData();
 
-    formData.append('cpf', cpf.value.toString().replace(/\D/g, ""));
+    formData.append('cpf', cpf);
     formData.append('nome', nome.value);
     formData.append('data_nascimento', data_nascimento.value);
     formData.append('sexo', sexo.value);
-    formData.append('cep', cep.value.toString().replace(/\D/g, ""));
+    formData.append('cep', (!cep ? 0 : cep));
     formData.append('endereco', endereco.value);
-    formData.append('telefone', telefone.value.toString().replace(/\D/g, ""));
+    formData.append('telefone', (!telefone ? 0 : telefone));
     formData.append('email', email.value);
+    console.table(formData);
 
     let url = 'http://127.0.0.1:5000/paciente';
     fetch(url, {
@@ -255,7 +211,14 @@ const gravarPaciente = async () => {
       body: formData
     })
       .then((response) => response.json())
-      .then(() => getList())
+      .then((data) => {
+        Swal.fire({
+          title: 'Sucesso!',
+          text: data.message,
+          icon: 'success'
+        })
+        getList()
+      })
       .catch((error) => {
         Swal.fire({
           title: 'Erro!',
@@ -309,7 +272,8 @@ const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) 
   const novaDataNascimento = new Date(data_nascimento).toLocaleDateString()
   const novaDataInsercao = new Date(data_insercao).toLocaleString('pt-BR');
   const cpfFormatado = formatarCPF(cpf).toString();
-  var item = [cpfFormatado, nome, novaDataNascimento, telefone, email, novaDataInsercao]
+  const telefoneFormatado = formatarTelefone(telefone).toString();
+  var item = [cpfFormatado, nome, novaDataNascimento, telefoneFormatado, email, novaDataInsercao]
   var table = document.getElementById('tabelaPacientes');
   var row = table.insertRow();
   row.id = cpf
@@ -319,4 +283,82 @@ const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) 
     cel.textContent = item[i];
   }
   insertButtons(row.insertCell(-1), cpf, nome)
+}
+
+
+/*
+  --------------------------------------------------------------------------------------
+  Inclusão das mascaras dos dados
+  --------------------------------------------------------------------------------------
+*/
+$(document).ready(function () {
+  $('#cpf').mask('000.000.000-00', { reverse: true });
+  $('#cep').mask('00000-000');
+  $("#telefone").mask("(00) 00000-0000");
+});
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para formatar o CPF
+  --------------------------------------------------------------------------------------
+*/
+const formatarCPF = (cpf) => {
+  let cpf_numerico = preencherComZerosEsquerda(cpf.toString().replace(/\D/g, ""), 11);
+  return cpf_numerico.substr(0, 3) + "." + cpf_numerico.substr(3, 3) + "." + cpf_numerico.substr(6, 3) + "-" + cpf_numerico.substr(9, 2);
+}
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para preencher com zeros a esquerda
+  --------------------------------------------------------------------------------------
+*/
+
+const preencherComZerosEsquerda = (numero, tamanho) => {
+  var strNumero = numero.toString();
+  var numeroZeros = tamanho - strNumero.length;
+  var resultado = "";
+  for (var i = 0; i < numeroZeros; i++) {
+    resultado += "0";
+  }
+  return resultado + strNumero;
+}
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para formatar o telefone
+  --------------------------------------------------------------------------------------
+*/
+const formatarTelefone = (telefone) => {
+  let telefone_numerico = preencherComZerosEsquerda(telefone.toString().replace(/\D/g, ""), 11);
+  if (telefone_numerico == 0) {
+    return "";
+  }
+  return "(" + telefone_numerico.substr(0, 2) + ") " + telefone_numerico.substr(2, 5) + "-" + telefone_numerico.substr(7, 4);
+}
+
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para validar o CPF
+  --------------------------------------------------------------------------------------
+*/
+function validarCPF(cpf_paciente) {
+  let soma = 0;
+  let resto;
+  let cpf = cpf_paciente.toString().replace(/\D/g, "");
+
+  if (cpf == '00000000000') return false;
+  for (i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  resto = (soma * 10) % 11;
+
+  if ((resto == 10) || (resto == 11)) resto = 0;
+  if (resto != parseInt(cpf.substring(9, 10))) return false;
+
+  soma = 0;
+  for (i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  resto = (soma * 10) % 11;
+
+  if ((resto == 10) || (resto == 11)) resto = 0;
+  if (resto != parseInt(cpf.substring(10, 11))) return false;
+  return true;
 }
