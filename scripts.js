@@ -1,3 +1,4 @@
+let alterarPaciente = false;
 
 /*
   --------------------------------------------------------------------------------------
@@ -5,6 +6,7 @@
   --------------------------------------------------------------------------------------
 */
 const abreFechaModal = () => {
+  alterarPaciente = false;
   let sessionPaciente = document.getElementById("novoPaciente");
   let cpf = document.getElementById("cpf");
   let nome = document.getElementById("nome");
@@ -29,6 +31,18 @@ const abreFechaModal = () => {
   endereco.disabled = false;
   telefone.disabled = false;
   email.disabled = false;
+
+  cpf.value = "";
+  nome.value = "";
+  data_nascimento.value = "";
+  sexo.value = "";
+  cep.value = "";
+  endereco.value = "";
+  telefone.value = "";
+  email.value = "";
+
+
+  cep.addEventListener("blur", () => consultarCEP(cep));
 }
 
 /*
@@ -57,9 +71,9 @@ const consultarPaciente = (cpf, alterar) => {
       nome.value = data.nome;
       data_nascimento.value = new Date(data.data_nascimento).toISOString().substring(0, 10);
       sexo.value = data.sexo;
-      cep.value = data.cep;
+      cep.value = formatarCEP(data.cep);
       endereco.value = data.endereco;
-      telefone.value = data.telefone;
+      telefone.value = formatarTelefone(data.telefone);
       email.value = data.email;
 
       cpf.disabled = true;
@@ -73,6 +87,8 @@ const consultarPaciente = (cpf, alterar) => {
 
       let botao = document.getElementById("botao_gravar");
       botao.style.display = (alterar) ? 'block' : 'none';
+
+      alterarPaciente = true;
     })
     .catch((error) => {
       Swal.fire({
@@ -133,6 +149,12 @@ const removerPaciente = (cpf, nome) => {
   --------------------------------------------------------------------------------------
 */
 const getList = async () => {
+  let table = document.getElementById('tabelaPacientes');
+  let linhas = table.rows;
+  for (let i = linhas.length - 1; i >= 1; i--) {
+    table.deleteRow(i);
+  }
+
   let url = 'http://127.0.0.1:5000/pacientes';
   fetch(url, {
     method: 'get',
@@ -163,7 +185,7 @@ getList()
 
 /*
   --------------------------------------------------------------------------------------
-  Função para colocar um item na lista do servidor via requisição POST
+  Função para incluir/alterar na lista do servidor via requisição POST/PUT
   --------------------------------------------------------------------------------------
 */
 const gravarPaciente = async () => {
@@ -195,8 +217,6 @@ const gravarPaciente = async () => {
   } else {
     const formData = new FormData();
 
-    console.log(data_nascimento.value);
-
     formData.append('cpf', cpf);
     formData.append('nome', nome.value);
     formData.append('data_nascimento', data_nascimento.value);
@@ -205,11 +225,10 @@ const gravarPaciente = async () => {
     formData.append('endereco', endereco.value);
     formData.append('telefone', (!telefone ? 0 : telefone));
     formData.append('email', email.value);
-    console.table(formData);
 
     let url = 'http://127.0.0.1:5000/paciente';
     fetch(url, {
-      method: 'post',
+      method: (alterarPaciente ? 'put' : 'post'),
       body: formData
     })
       .then((response) => response.json())
@@ -218,15 +237,16 @@ const gravarPaciente = async () => {
           title: 'Sucesso!',
           text: data.message,
           icon: 'success'
-        })
-        getList()
+        });
+        abreFechaModal();
+        getList();
       })
       .catch((error) => {
         Swal.fire({
           title: 'Erro!',
           text: error,
           icon: 'error'
-        })
+        });
       });
   }
 }
@@ -275,13 +295,13 @@ const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) 
   const novaDataInsercao = new Date(data_insercao).toLocaleString('pt-BR', { timeZone: 'UTC' })
   const cpfFormatado = formatarCPF(cpf).toString();
   const telefoneFormatado = formatarTelefone(telefone).toString();
-  var item = [cpfFormatado, nome, novaDataNascimento, telefoneFormatado, email, novaDataInsercao]
-  var table = document.getElementById('tabelaPacientes');
-  var row = table.insertRow();
+  let item = [cpfFormatado, nome, novaDataNascimento, telefoneFormatado, email, novaDataInsercao]
+  let table = document.getElementById('tabelaPacientes');
+  let row = table.insertRow();
   row.id = cpf
 
-  for (var i = 0; i < item.length; i++) {
-    var cel = row.insertCell(i);
+  for (let i = 0; i < item.length; i++) {
+    let cel = row.insertCell(i);
     cel.textContent = item[i];
   }
   insertButtons(row.insertCell(-1), cpf, nome)
@@ -293,10 +313,10 @@ const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) 
   Inclusão das mascaras dos dados
   --------------------------------------------------------------------------------------
 */
-$(document).ready(function () {
+$(document).ready(() => {
   $('#cpf').mask('000.000.000-00', { reverse: true });
+  $("#telefone").mask("(00) 0000-0000");
   $('#cep').mask('00000-000');
-  $("#telefone").mask("(00) 00000-0000");
 });
 
 /*
@@ -316,14 +336,15 @@ const formatarCPF = (cpf) => {
 */
 
 const preencherComZerosEsquerda = (numero, tamanho) => {
-  var strNumero = numero.toString();
-  var numeroZeros = tamanho - strNumero.length;
-  var resultado = "";
-  for (var i = 0; i < numeroZeros; i++) {
+  let strNumero = numero.toString();
+  let numeroZeros = tamanho - strNumero.length;
+  let resultado = "";
+  for (let i = 0; i < numeroZeros; i++) {
     resultado += "0";
   }
   return resultado + strNumero;
 }
+
 
 /*
   --------------------------------------------------------------------------------------
@@ -331,11 +352,22 @@ const preencherComZerosEsquerda = (numero, tamanho) => {
   --------------------------------------------------------------------------------------
 */
 const formatarTelefone = (telefone) => {
-  let telefone_numerico = preencherComZerosEsquerda(telefone.toString().replace(/\D/g, ""), 11);
+  let telefone_numerico = preencherComZerosEsquerda(telefone.toString().replace(/\D/g, ""), 10);
   if (telefone_numerico == 0) {
     return "";
   }
-  return "(" + telefone_numerico.substr(0, 2) + ") " + telefone_numerico.substr(2, 5) + "-" + telefone_numerico.substr(7, 4);
+  return "(" + telefone_numerico.substr(0, 2) + ") " + telefone_numerico.substr(2, 4) + "-" + telefone_numerico.substr(6, 4);
+}
+
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para formatar o CEP
+  --------------------------------------------------------------------------------------
+*/
+const formatarCEP = (cep) => {
+  let cep_numerico = preencherComZerosEsquerda(cep.toString().replace(/\D/g, ""), 8);
+  return cep_numerico.substr(0, 5) + "-" + cep_numerico.substr(5, 4);
 }
 
 
@@ -344,7 +376,7 @@ const formatarTelefone = (telefone) => {
   Função para validar o CPF
   --------------------------------------------------------------------------------------
 */
-function validarCPF(cpf_paciente) {
+const validarCPF = (cpf_paciente) => {
   let soma = 0;
   let resto;
   let cpf = cpf_paciente.toString().replace(/\D/g, "");
@@ -363,4 +395,27 @@ function validarCPF(cpf_paciente) {
   if ((resto == 10) || (resto == 11)) resto = 0;
   if (resto != parseInt(cpf.substring(10, 11))) return false;
   return true;
+}
+
+
+/*
+  --------------------------------------------------------------------------------------
+  Função para buscar o endereço caso não tenha sido preenchido
+  --------------------------------------------------------------------------------------
+*/
+const consultarCEP = () => {
+  let endereco = document.getElementById("endereco");
+  if (endereco.value == "") {
+    let cep = document.getElementById("cep").value.toString().replace(/\D/g, "");
+    let url = 'https://viacep.com.br/ws/' + preencherComZerosEsquerda(cep, 8) + '/json/';
+    fetch(url, {
+      method: 'get'
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (endereco.value == "") {
+          endereco.value = data.logradouro + ',    - ' + data.bairro + ' - ' + data.localidade + ' - ' + data.uf;
+        }
+      })
+  }
 }

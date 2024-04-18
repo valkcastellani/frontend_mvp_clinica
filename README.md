@@ -19,3 +19,5 @@ Basta fazer o download do projeto e abrir o arquivo index.html no seu browser.
 > [jQuery](https://jquery.com/) é uma biblioteca para manipulação do DOM.
 
 > [jQuery-Mask](https://igorescobar.github.io/jQuery-Mask-Plugin/) é um plugin para trabalhar com máscaras via jQuery.
+
+> [ViaCEP](https://viacep.com.br/) é uma API para Consultar CEPs de todo o Brasil.
