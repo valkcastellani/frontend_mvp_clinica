@@ -195,6 +195,8 @@ const gravarPaciente = async () => {
   } else {
     const formData = new FormData();
 
+    console.log(data_nascimento.value);
+
     formData.append('cpf', cpf);
     formData.append('nome', nome.value);
     formData.append('data_nascimento', data_nascimento.value);
@@ -269,8 +271,8 @@ const insertButtons = (parent, cpf, nome) => {
   --------------------------------------------------------------------------------------
 */
 const insertList = (cpf, nome, data_nascimento, telefone, email, data_insercao) => {
-  const novaDataNascimento = new Date(data_nascimento).toLocaleDateString()
-  const novaDataInsercao = new Date(data_insercao).toLocaleString('pt-BR');
+  const novaDataNascimento = new Date(data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+  const novaDataInsercao = new Date(data_insercao).toLocaleString('pt-BR', { timeZone: 'UTC' })
   const cpfFormatado = formatarCPF(cpf).toString();
   const telefoneFormatado = formatarTelefone(telefone).toString();
   var item = [cpfFormatado, nome, novaDataNascimento, telefoneFormatado, email, novaDataInsercao]
