@@ -1,8 +1,14 @@
-# FrontEnd do MVP de Clínicas
+# Frontend do MVP de Clínicas
 
-Frontend em HTML, CSS e JavaScript do MVP de Clínicas desenvolvido como projeto final do módulo de Desenvolvimento Full Stack Básico da Pós-Graduação em Engenharia de Software da PUC-Rio.
+Este projeto surge com o propósito de oferecer uma solução para a gestão da agenda de uma amiga, fisioterapeuta. Concebido como parte integrante do currículo do curso de Pós-Graduação em Engenharia de Software da PUC-Rio, o desenvolvimento foi realizado como projeto do módulo de Desenvolvimento Full Stack Básico.
 
-O objetivo aqui é ilustrar da melhor forma possível como seria realizado um CRUD (Create, Read, Update and Delete) da tabela de Pacientes.
+Utilizando tecnologias fundamentais da web, como HTML, CSS e JavaScript, este MVP visa proporcionar uma experiência exemplar no controle de pacientes, demonstrando de maneira clara e concisa as operações essenciais de um sistema CRUD (Create, Read, Update and Delete) no contexto do cadastro de pacientes.
+
+---
+
+## API do MVP de Clínicas
+
+Para conseguir utilizar este frontend você deve utilizar também a API disponibilizada no endereço [https://github.com/valkcastellani/mvp_clinica_api](https://github.com/valkcastellani/mvp_clinica_api).
 
 ---
 
